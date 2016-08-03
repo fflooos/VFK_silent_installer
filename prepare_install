@@ -43,7 +43,7 @@ else
 	adduser infovista
 fi
 
-getent passwd "infovista" > /dev/null
+getent passwd "ivuser" > /dev/null
 if [ $? -eq 0 ]; then
     echo "User ivuser exist"
 else

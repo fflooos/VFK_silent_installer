@@ -1,0 +1,47 @@
+echo "Installing InfoVista Server 4.3"
+
+echo "Installing dependencies..."
+yum install -y compat-libstdc++-33.x86_64 compat-libstdc++-33.i686 gdb procps pstack xorg-x11-server-Xvfb kernelsmp
+
+
+Press <Enter> to continue
+# Expect script for automated installation
+installIVS=$(/usr/bin/expect -c "
+spawn ./setup.sh
+expect \"Press <Enter> to continue\"
+send \"\r\"
+send \"\r\"
+send \"q\"
+expect \"Do you agree with the terms of the agreement?\"
+send \"yes\r\"
+expect \"Select an operation?\"
+send \"\r\"
+expect \"Do you want to create it?\"
+send \"yes\r\"
+expect \"Do you want to create it?\"
+send \"yes\r\"
+expect \"Is this the copy that you want to configure?\"
+send \"yes\r\"
+expect \"Do you want to create links to ObjectStore libraries in \/usr\/lib?\"
+send \"yes\r\"
+expect \"Please enter the transaction log pathname\"
+expect \":\"
+send \"transac.log\r\"
+expect \"Please enter the transaction log pathname:\"
+send \"\/tmp\/transac.log\r\"
+expect \"Please specify the directory where the program schema databases will be stored.\"
+send \"\r\"
+expect \"Do you want to proceed?\"
+send \"yes\r\"
+expect \"Do you want to initialize \/tmp\/transac.log now?\"
+send \"yes\r\"
+expect \"Would you like to configure automatic server startup and shutdown?\"
+send \"yes\r\"
+expect \"Do you want to modify the default server configuration?\"
+send \"n\r\"
+interact
+")
+
+
+
+echo "$installIVS"

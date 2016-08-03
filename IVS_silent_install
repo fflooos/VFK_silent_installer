@@ -6,7 +6,12 @@ echo "Installing dependencies..."
 yum install -y compat-libstdc++-33.x86_64 compat-libstdc++-33.i686 gdb procps pstack xorg-x11-server-Xvfb kernelsmp
 
 
-Press <Enter> to continue
+command mkdir -p /opt/vfk_install_files/IVS
+command chown -R infovista:infovista /opt/vfk_install_files/
+command mv -v /tmp/InfoVista-4.3-linux.zip /opt/vfk_install_files/IVS/
+command cd /opt/vfk_install_files/IVS/ && unzip InfoVista-4.3-linux.zip
+command chmod +x setup.sh
+
 # Expect script for automated installation
 installIVS=$(/usr/bin/expect -c "
 spawn ./setup.sh

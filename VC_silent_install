@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+echo "Installing VistaCockpit..."
+
+echo "Installing pre-requisite package..."
+yum install -y procps  compat-libstdc++-33.i686 compat-libstdc++-33.x86_64 libcap.i686 libstdc++.i686 libstdc++.x86_64 libXext.i686 compat-libcap1.i686 compat-libcap1.x86_64 pam.i686 pam.x86_64
+
+command mkdir -p /opt/vfk_install_files/VC
+command chown -R infovista:infovista /opt/vfk_install_files/
+command mv -v /tmp/VistaCockpit-5.0-linux.zip /opt/vfk_install_files/VC/
+command cd /opt/vfk_install_files/VC/ && unzip VistaCockpit-5.0-linux.zip
+command chmod +x setup.sh
+
+# Expect script for automated installation
+installVC=$(/usr/bin/expect -c "
+spawn ./setup.sh
+expect \"Press <Enter> to continue\"
+send \"\r\"
+send \"\r\"
+send \"q\"
+expect \"Do you agree with the terms of the agreement?\"
+send \"yes\r\"
+expect \"Select an operation?\"
+send \"\r\"
+expect \"Port number?\"
+send \"\r\"
+expect \"Port number?\"
+send \"\r\"
+expect \"Port number?\"
+send \"\r\"
+expect \"Do you confirm these settings?\"
+send \"y\r\"
+interact
+")
+
+echo "$installVC"
+
+echo "Adding binaries to PATH..."
+command echo -e "export PATH=\"\$PATH:/opt/InfoVista/Cockpit/mgtconsole/bin/\"" >> /home/infovista/.bashrc
+command echo -e "export PATH=\"\$PATH:/opt/InfoVista/Cockpit/mgtconsole/bin/\"" >> /home/ivuser/.bashrc
+

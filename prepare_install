@@ -1,0 +1,60 @@
+#/usr/bin/env bash
+
+#!/bin/bash
+
+HOST="hostname.yourdomain.com"
+IP="192.168.0.214"
+
+#set hostname in hosts
+if grep -q "$IP" /etc/hosts; then
+    echo "host already in /etc/hosts"
+else
+    echo "Adding $HOST to /etc/hosts"
+    echo "$IP $HOST" >> /etc/hosts
+fi
+
+echo "VFK Installation v1"
+
+echo "Starting pre-requisite check"
+echo "Running OS update..."
+
+yum update -y
+
+echo "Installing minimal X Window System for remote X11"
+yum install -y xorg-x11-xauth xorg-x11-tools xorg-x11-apps xorg-x11-xterm
+
+echo "Installing unzip"
+yum install -y unzip
+
+# SE Linux check
+/usr/sbin/selinuxenabled
+if [ $? -ne 0 ]; then 
+	echo "DISABLED";
+else 
+	echo "SE Linux ENABLED -> Disabling...";
+	sed -i -e 's/^SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
+fi
+
+getent passwd "infovista" > /dev/null
+if [ $? -eq 0 ]; then
+    echo "User infovista exist"
+else
+    echo "User infovista does not exist -> Creating..."
+	adduser infovista
+fi
+
+getent passwd "infovista" > /dev/null
+if [ $? -eq 0 ]; then
+    echo "User ivuser exist"
+else
+    echo "User ivuser does not exist -> Creating..."
+	adduser -g infovista ivuser
+fi
+
+
+echo "Installing expect for automated installation script"
+yum install -y expect
+
+# Reboot needed for X11 && SeLinux
+echo "Please reboot your system..."
+

@@ -2,4 +2,4 @@
 IV VFK automated installation
 
 VM install script not fully automated,
-=> dbmanager & vmconfig step to be replace by dbmanagernogui & vmconfignogui
+=> dbmanager & vmconfig step to be replaced by dbmanagernogui & vmconfignogui
